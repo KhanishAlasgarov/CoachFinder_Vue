@@ -20,12 +20,13 @@ export default createRouter({
     { path: '/coaches', name:'/coaches', component: CoachList },
     {
       name:'coachDetail',
+      props:true,
       path: '/coaches/:id',
       component: CoachDetail,
       children: [{ path: 'contact', name:'contact', component: ContactCoach }],
     },
     { path: '/register',name:'register', component: CoachRegistration },
     { path: '/requests', component: RequestsRecived },
-    { path: '/:notFound(.*)', component: NotFound },
+    { path: '/:notFound(.*)', name:'notFound',component: NotFound },
   ],
 });
