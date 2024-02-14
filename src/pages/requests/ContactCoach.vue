@@ -1,10 +1,7 @@
 <template>
-    <div>
-        
-    </div>
+  <div>contact</div>
 </template>
 
 <script>
-export default{
-    
-}</script>
+export default {};
+</script>

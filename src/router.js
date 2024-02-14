@@ -14,15 +14,17 @@ export default createRouter({
   routes: [
     {
       path: '/',
+      
       redirect: '/coaches',
     },
-    { path: '/coaches', component: CoachList },
+    { path: '/coaches', name:'/coaches', component: CoachList },
     {
+      name:'coachDetail',
       path: '/coaches/:id',
       component: CoachDetail,
-      children: [{ path: 'contact', component: ContactCoach }],
+      children: [{ path: 'contact', name:'contact', component: ContactCoach }],
     },
-    { path: '/register', component: CoachRegistration },
+    { path: '/register',name:'register', component: CoachRegistration },
     { path: '/requests', component: RequestsRecived },
     { path: '/:notFound(.*)', component: NotFound },
   ],
