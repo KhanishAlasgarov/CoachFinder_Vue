@@ -8,5 +8,10 @@ export default createStore({
     coaches,
     requests,
   },
+  state(){
+    return{
+      userId:'c3'
+    }
+  }
   
 });

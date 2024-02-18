@@ -1,60 +1,162 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <div class="form-control">
+    <div
+      class="form-control"
+      :class="{ invalid: !formAction.firstName.isValid }"
+    >
       <label for="firstname">Firstname</label>
-      <input type="text" id="firstname" v-model.trim="firstName" />
+      <input
+        @input="clearValidate('firstName')"
+        type="text"
+        id="firstname"
+        v-model.trim="formAction.firstName.val"
+      />
+      <p v-if="!formAction.firstName.isValid">Firstname must not be empty!</p>
     </div>
 
-    <div class="form-control">
+    <div
+      class="form-control"
+      :class="{ invalid: !formAction.lastName.isValid }"
+    >
       <label for="lastname">Lastname</label>
-      <input type="text" id="lastname" v-model.trim="lastName" />
+      <input
+        type="text"
+        id="lastname"
+        v-model.trim="formAction.lastName.val"
+        @input="clearValidate('firstName')"
+      />
+      <p v-if="!formAction.lastName.isValid">Lastname must not be empty!</p>
     </div>
 
-    <div class="form-control">
+    <div
+      class="form-control"
+      :class="{ invalid: !formAction.description.isValid }"
+    >
       <label for="description">Description</label>
-      <textarea id="description" rows="5" v-model.trim="description"></textarea>
+      <textarea
+        id="description"
+        rows="5"
+        v-model.trim="formAction.description.val"
+      ></textarea>
+      <p v-if="!formAction.description.isValid">
+        Description must not be empty!
+      </p>
     </div>
 
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !formAction.rate.isValid }">
       <label for="rate">Hourly Rate</label>
-      <input type="number" id="rate" v-model.number="rate" />
+      <input type="number" id="rate" v-model.number="formAction.rate.val" />
+      <p v-if="!formAction.rate.isValid">Add appropriate data!!</p>
     </div>
 
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !formAction.areas.isValid }">
       <h3>Area of Expertise</h3>
       <div>
-        <input type="checkbox" id="frontend" value="frontend31" v-model="areas" />
+        <input
+          type="checkbox"
+          id="frontend"
+          value="frontend"
+          v-model="formAction.areas.val"
+        />
         <label for="frontend">Frontend Development</label>
       </div>
 
       <div>
-        <input type="checkbox" id="backend" value="backend" v-model="areas" />
+        <input
+          type="checkbox"
+          id="backend"
+          value="backend"
+          v-model="formAction.areas.val"
+        />
         <label for="backend">Backend Development</label>
       </div>
 
       <div>
-        <input type="checkbox" id="career" value="career" v-model="areas" />
+        <input
+          type="checkbox"
+          id="career"
+          value="career"
+          v-model="formAction.areas.val"
+        />
         <label for="career">Career Advisory</label>
       </div>
+      <p v-if="!formAction.areas.isValid">Select something!!</p>
     </div>
+    <p v-if="!formIsValid">Please fix the above errors and submit again.</p>
     <base-button>Register</base-button>
   </form>
 </template>
 
 <script>
 export default {
+  emits: ['save-data'],
   data() {
     return {
-      firstName: null,
-      lastName: null,
-      description: null,
-      rate: null,
-      areas: [],
+      formAction: {
+        firstName: {
+          val: '',
+          isValid: true,
+        },
+        lastName: {
+          val: '',
+          isValid: true,
+        },
+        description: {
+          val: '',
+          isValid: true,
+        },
+        rate: {
+          val: '',
+          isValid: true,
+        },
+        areas: {
+          val: [],
+          isValid: true,
+        },
+      },
+      formIsValid: true,
     };
   },
   methods: {
+    clearValidate(input) {
+      if (!this.formAction[input].val) {
+        this.formAction[input].isValid = false;
+      } else {
+        this.formAction[input].isValid = true;
+      }
+    },
+    validateForm() {
+      this.formIsValid = true;
+      for (const key in this.formAction) {
+        if (
+          key == 'rate' &&
+          (!this.formAction[key].val || this.formAction[key].val <= 0)
+        ) {
+          this.formIsValid = false;
+          this.formAction[key].isValid = false;
+        } else if (
+          key == 'areas' &&
+          (!this.formAction[key].val || this.formAction[key].val.length == 0)
+        ) {
+          this.formAction[key].isValid = false;
+          this.formIsValid = false;
+        } else if (!this.formAction[key].val) {
+          this.formAction[key].isValid = false;
+          this.formIsValid = false;
+        }
+      }
+    },
     handleSubmit() {
-        console.log(this.areas);
+      this.validateForm();
+      if (this.formIsValid) {
+        this.$emit('save-data', {
+          firstName: this.formAction.firstName.val,
+          lastName: this.formAction.lastName.val,
+          description: this.formAction.description.val,
+          hourlyRate: this.formAction.rate.val,
+          areas: this.formAction.areas.val,
+        });
+      }
     },
   },
 };
@@ -114,4 +216,5 @@ h3 {
 .invalid input,
 .invalid textarea {
   border: 1px solid red;
-}</style>
+}
+</style>

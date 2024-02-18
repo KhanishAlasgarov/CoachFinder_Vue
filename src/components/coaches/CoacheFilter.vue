@@ -39,7 +39,7 @@ export default {
         ...this.filters,
         [id]: isActive,
       };
-
+      
       this.$emit('change-filter', this.filters);
     },
   },
