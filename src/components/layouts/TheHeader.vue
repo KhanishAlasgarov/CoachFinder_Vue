@@ -8,13 +8,28 @@
         <li>
           <router-link to="/">All Coaches</router-link>
         </li>
-        <li>
+        <li v-if="isLoggedIn && isCoach">
           <router-link to="/requests">Requests</router-link>
+        </li>
+        <li v-else>
+          <router-link to="/auth">Login</router-link>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+export default {
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+    ...mapGetters('coaches', ['isCoach']),
+  },
+};
+</script>
 
 <style scoped>
 header {

@@ -16,8 +16,9 @@ export default {
     context.commit('addRequest', data);
   },
   async loadData(context) {
+    const token = context.rootGetters.token;
     const response = await fetch(
-      'https://find-tutor-96639-default-rtdb.firebaseio.com/requests.json'
+      `https://find-tutor-96639-default-rtdb.firebaseio.com/requests.json?auth=${token}`
     );
 
     const responseData = await response.json();

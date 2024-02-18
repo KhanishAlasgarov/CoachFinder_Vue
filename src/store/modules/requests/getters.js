@@ -1,5 +1,5 @@
 export default {
   getRequests(state, _, rootState) {
-    return state.requests.filter((x) => x.coachId == rootState.userId);
+    return state.requests.filter((x) => x.coachId == rootState.auth.userId);
   },
 };

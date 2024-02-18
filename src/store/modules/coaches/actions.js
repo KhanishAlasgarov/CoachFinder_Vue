@@ -1,8 +1,13 @@
 export default {
   async registerCoache(context, data) {
-    const userId = context.rootState.userId;
+    const userId = context.rootState.auth.userId;
+    const token = context.rootGetters.token;
+    console.log("token:");
+    console.log(token);
+    console.log("userId:");
+    console.log(userId);
     const response = await fetch(
-      `https://find-tutor-96639-default-rtdb.firebaseio.com/coaches/${userId}.json`,
+      `https://find-tutor-96639-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`,
       {
         method: 'PUT',
         body: JSON.stringify(data),

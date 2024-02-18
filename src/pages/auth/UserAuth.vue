@@ -78,6 +78,7 @@ export default {
       }
 
       this.isLoading = false;
+      this.$router.replace('/')
     },
     switchAuthMode() {
       if (this.mode == 'login') {
