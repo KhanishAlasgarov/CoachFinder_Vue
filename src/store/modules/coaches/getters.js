@@ -5,16 +5,19 @@ export default {
   hasCoaches(state) {
     return state.coaches.length;
   },
-  isCoach(_, getters, rootState) { 
-    return getters.getCoaches.find((coach) => coach.id === rootState.userId);
+  isCoach(state, getters, rootState) {
+    let coache = getters.getCoaches.find(
+      (coach) => coach.id === rootState.auth.userId
+    ); 
+    return coache;
   },
-  shouldUpdate(state){
+  shouldUpdate(state) {
     const lastFetch = state.lastFetch;
     if (!lastFetch) {
       return true;
     }
     const currentTimeStamp = new Date().getTime();
 
-    return (currentTimeStamp - lastFetch)/1000 >60
-  }
+    return (currentTimeStamp - lastFetch) / 1000 > 60;
+  },
 };
