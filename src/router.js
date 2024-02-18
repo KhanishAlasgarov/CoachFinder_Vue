@@ -8,6 +8,7 @@ import ContactCoach from './pages/requests/ContactCoach.vue';
 import RequestsRecived from './pages/requests/RequestsRecived.vue';
 
 import NotFound from './pages/NotFound.vue';
+import UserAuth from "./pages/auth/UserAuth.vue"
 
 export default createRouter({
   history: createWebHistory(),
@@ -34,6 +35,8 @@ export default createRouter({
     },
     { path: '/register', name: 'register', component: CoachRegistration },
     { path: '/requests', component: RequestsRecived },
+    { path: '/auth', component: UserAuth },
     { path: '/:notFound(.*)', name: 'notFound', component: NotFound },
+    
   ],
 });

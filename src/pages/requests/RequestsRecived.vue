@@ -1,5 +1,8 @@
 <template>
   <section>
+    <base-dialog :show="!!error" title="An error occurred!" @close="closeModal">
+      <p>{{ error }}</p>
+    </base-dialog>
     <base-card>
       <header>
         <h2>Requests Recived</h2>
@@ -22,10 +25,11 @@
 <script>
 import RequestItem from '../../components/requests/RequestItem.vue';
 export default {
-  data(){
-    return{
-      isLoading:false,
-    }
+  data() {
+    return {
+      isLoading: false,
+      error:null,
+    };
   },
   components: {
     RequestItem,
@@ -33,11 +37,18 @@ export default {
   created() {
     this.loadData();
   },
-  methods:{
+  methods: {
+    closeModal(){
+      this.error = null;
+    },
     async loadData() {
-      this.isLoading=true;
-      await this.$store.dispatch('requests/loadData');
-      this.isLoading =false;
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('requests/loadData');
+      } catch (error) {
+        this.error = error;
+      }
+      this.isLoading = false;
     },
   },
   computed: {
@@ -47,7 +58,6 @@ export default {
     hasRequests() {
       return this.$store.getters['requests/getRequests'].length > 0;
     },
-    
   },
 };
 </script>
