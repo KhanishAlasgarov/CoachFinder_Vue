@@ -1,16 +1,28 @@
 export default {
   async login(context, payload) {
-    const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDkZN64WbUVYa1aBAteA1ACNTwiiRgXNNg',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          email: payload.email,
-          password: payload.password,
-          returnSecureToken: true,
-        }),
-      }
-    );
+    return context.dispatch('auth', {
+      ...payload,
+      mode: 'login',
+    });
+  },
+  async auth(context, payload) {
+    const mode = payload.mode;
+    let url =
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDkZN64WbUVYa1aBAteA1ACNTwiiRgXNNg';
+
+    if (mode === 'signup') {
+      url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDkZN64WbUVYa1aBAteA1ACNTwiiRgXNNg';
+    }
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        email: payload.email,
+        password: payload.password,
+        returnSecureToken: true,
+      }),
+    });
 
     const responseData = await response.json();
     if (!response.ok) {
@@ -28,38 +40,16 @@ export default {
     });
   },
   async signup(context, payload) {
-    const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDkZN64WbUVYa1aBAteA1ACNTwiiRgXNNg',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          email: payload.email,
-          password: payload.password,
-          returnSecureToken: true,
-        }),
-      }
-    );
-
-    const responseData = await response.json();
-    if (!response.ok) {
-      console.log(responseData);
-      const error = new Error(
-        responseData.message ?? 'Failed to authenticate.'
-      );
-      throw error;
-    }
-
-    context.commit('setUser', {
-      token: responseData.idToken,
-      userId: responseData.localId,
-      tokenExpiration: responseData.expiresIn,
+    return context.dispatch('auth', {
+      ...payload,
+      mode: 'signup',
     });
   },
-  logout(context){
-    context.commit('setUser',{
-      token:null,
-      userId:null,
-      tokenExpiration:null,
+  logout(context) {
+    context.commit('setUser', {
+      token: null,
+      userId: null,
+      tokenExpiration: null,
     });
-  }
+  },
 };
