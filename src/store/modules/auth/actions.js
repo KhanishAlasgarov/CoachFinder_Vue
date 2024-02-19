@@ -32,12 +32,28 @@ export default {
       );
       throw error;
     }
+    localStorage.setItem('token', responseData.idToken);
+    localStorage.setItem('userId', responseData.localId);
+    localStorage.setItem('tokenExpiration', responseData.expiresIn);
 
     context.commit('setUser', {
       token: responseData.idToken,
       userId: responseData.localId,
       tokenExpiration: responseData.expiresIn,
     });
+  },
+  autoLogin(context) {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
+
+    if (token && userId && tokenExpiration) {
+      context.commit('setUser', {
+        token,
+        userId,
+        tokenExpiration,
+      });
+    }
   },
   async signup(context, payload) {
     return context.dispatch('auth', {
