@@ -91,8 +91,8 @@ export default {
       tokenExpiration: null,
     });
   },
-  autoLogout(context){
+  autoLogout(context) {
     context.dispatch('logout');
     context.commit('didLogout');
-  }
+  },
 };
