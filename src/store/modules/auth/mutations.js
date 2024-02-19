@@ -4,5 +4,5 @@ export default {
     state.userId = payload.userId;
     state.tokenExpiration = payload.tokenExpiration;
     
-  },
+  }, 
 };

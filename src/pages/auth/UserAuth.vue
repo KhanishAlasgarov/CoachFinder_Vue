@@ -73,12 +73,13 @@ export default {
         } else {
           await this.$store.dispatch('signup', actionPayload);
         }
+        this.$router.replace('/');
       } catch (error) {
         this.error = error.message ?? 'Failed to authenticate, try later.';
       }
 
       this.isLoading = false;
-      this.$router.replace('/')
+      
     },
     switchAuthMode() {
       if (this.mode == 'login') {

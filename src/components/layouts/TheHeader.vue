@@ -1,32 +1,57 @@
 <template>
-  <header>
-    <nav>
-      <h1>
-        <router-link to="/">Find a Coach</router-link>
-      </h1>
-      <ul>
-        <li>
-          <router-link to="/">All Coaches</router-link>
-        </li>
-        <li v-if="isLoggedIn && isCoach">
-          <router-link to="/requests">Requests</router-link>
-        </li>
-        <li v-else>
-          <router-link to="/auth">Login</router-link>
-        </li>
-      </ul>
-    </nav>
-  </header>
+  <div>
+    <base-dialog :show="isLoading" title="Authenticating..." fixed>
+      <p>Authenticating...</p>
+      <base-spinner></base-spinner
+    ></base-dialog>
+    <header>
+      <nav>
+        <h1>
+          <router-link to="/">Find a Coach</router-link>
+        </h1>
+        <ul>
+          <li>
+            <router-link to="/">All Coaches</router-link>
+          </li>
+          <li v-if="isLoggedIn && isCoach">
+            <router-link to="/requests">Requests</router-link>
+          </li>
+          <li v-else>
+            <router-link to="/auth">Login</router-link>
+          </li>
+          <li v-if="isLoggedIn">
+            <base-button @click="logout">Logout</base-button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 export default {
+  data(){
+    return{
+      isLoading:false,
+    }
+  },
   computed: {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
     },
     ...mapGetters('coaches', ['isCoach']),
+  },
+  methods: {
+    logout() {
+      this.isLoading=true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.$store.dispatch('logout');
+        
+        this.$router.push('/');
+      }, 2000);
+    },
   },
 };
 </script>
