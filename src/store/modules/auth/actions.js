@@ -34,7 +34,7 @@ export default {
       throw error;
     }
     const expiresIn = +responseData.expiresIn * 1000;
-    const expirationDate = new Date() + expiresIn;
+    const expirationDate = new Date().getTime() + expiresIn;
 
     localStorage.setItem('token', responseData.idToken);
     localStorage.setItem('userId', responseData.localId);
